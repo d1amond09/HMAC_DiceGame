@@ -7,24 +7,23 @@ public class Game
 {
 	private readonly TurnManager _turnManager;
 	private readonly DiceSelector _diceSelector;
-	private readonly RoundHandler _roundHandler;
-	private readonly WinnerDeterminer _winnerDeterminer;
+	private readonly ThrowHandler _throwHandler;
 	private Dice? _computerDice;
 	private Dice? _userDice;
 	private int _computerThrowResult;
 	private int _userThrowResult;
+
+	
 
 	public Game(List<Dice> dices)
 	{
 		var dicesForTable = new List<Dice>(dices);
 		var rndGenerator = new RandomGenerator();
 		var table = new TableGenerator();
-		var throwHandler = new ThrowHandler(rndGenerator, table, dicesForTable);
+		_throwHandler = new ThrowHandler(rndGenerator, table, dicesForTable);
 
-		_turnManager = new TurnManager(throwHandler);
+		_turnManager = new TurnManager(_throwHandler);
 		_diceSelector = new DiceSelector(dices, dicesForTable, table);
-		_roundHandler = new RoundHandler(throwHandler);
-		_winnerDeterminer = new WinnerDeterminer();
 	}
 
 	public void Run()
@@ -56,11 +55,46 @@ public class Game
 	private void PlayRound()
 	{
 		Console.WriteLine("It's time for the throws.");
-		(_computerThrowResult, _userThrowResult) = _roundHandler.PlayRound(_turnManager.CurrentPlayer, _computerDice!, _userDice!);
+		(_computerThrowResult, _userThrowResult) = PlayRound(_turnManager.CurrentPlayer, _computerDice!, _userDice!);
+	}
+
+	public (int computerResult, int userResult) PlayRound(int currentPlayer, Dice computerDice, Dice userDice)
+	{
+		int computerThrow, userThrow;
+
+		if (currentPlayer == 0)
+		{
+			computerThrow = _throwHandler.ComputerThrows(computerDice);
+			userThrow = _throwHandler.PlayerThrows(userDice);
+		}
+		else
+		{
+			userThrow = _throwHandler.ComputerThrows(userDice);
+			computerThrow = _throwHandler.PlayerThrows(computerDice);
+		}
+
+		return (computerThrow, userThrow);
 	}
 
 	private void DetermineWinner()
 	{
-		_winnerDeterminer.Determine(_computerThrowResult, _userThrowResult);
+		if (_computerThrowResult == -1 || _userThrowResult == -1)
+		{
+			Console.WriteLine("Game was exited.");
+			return;
+		}
+
+		if (_userThrowResult > _computerThrowResult)
+		{
+			Console.WriteLine($"You win ({_userThrowResult} > {_computerThrowResult})!");
+		}
+		else if (_userThrowResult < _computerThrowResult)
+		{
+			Console.WriteLine($"I win ({_computerThrowResult} > {_userThrowResult})!");
+		}
+		else
+		{
+			Console.WriteLine($"It's a draw ({_userThrowResult} = {_computerThrowResult}).");
+		}
 	}
 }

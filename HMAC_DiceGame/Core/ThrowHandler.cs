@@ -1,4 +1,6 @@
-﻿using HMAC_DiceGame.Models;
+﻿using System.Security.Cryptography;
+using System;
+using HMAC_DiceGame.Models;
 using HMAC_DiceGame.Services;
 using HMAC_DiceGame.Utilities;
 
@@ -20,13 +22,8 @@ public class ThrowHandler(RandomGenerator rndGenerator, TableGenerator table, Li
 		return Throws(dice, false);
 	}
 
-	private int Throws(Dice? dice, bool isComputer)
+	private void OutputChoice(int range, string hmac)
 	{
-		int range = dice!.Length;
-		_rndGenerator.GenerateKey();
-		_rndGenerator.CalculateHMACSHA256(range);
-		var hmac = _rndGenerator.HMAC;
-
 		Console.WriteLine($"I selected a random value in the range 0..{range - 1} (HMAC={hmac}).");
 		Console.WriteLine("Try to guess my selection.");
 		for (int i = 0; i < range; i++)
@@ -34,6 +31,16 @@ public class ThrowHandler(RandomGenerator rndGenerator, TableGenerator table, Li
 
 		Console.WriteLine("X - exit");
 		Console.WriteLine("? - help");
+	}
+
+	private int Throws(Dice? dice, bool isComputer)
+	{
+		int range = dice!.Length;
+		_rndGenerator.GenerateKey();
+		_rndGenerator.CalculateHMACSHA256(range);
+		var hmac = _rndGenerator.HMAC;
+
+		OutputChoice(range, hmac);
 
 		var userChoice = Console.ReadLine() ?? "";
 		if (userChoice == "X") GameExiter.Exit();
