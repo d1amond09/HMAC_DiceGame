@@ -22,12 +22,18 @@ public static class ConfigurationParserExtensions
 		{
 			var faces = config
 				.Split(separator)
-				.Select(s => int.Parse(s.Trim()));
+				.Select(s =>
+				{
+					int num = int.Parse(s.Trim());
+					if (num < 0)
+						throw new ArgumentException($"ERROR: Negative values are not allowed: {config}");
+					return num;
+				});
 
-			if(faces.Count() < 3) 
-				throw new ArgumentException($"ERROR: Configuration contains less then 3 integers: {config}");
+			if (faces.Count() < 3)
+				throw new ArgumentException($"ERROR: Configuration contains less than 3 integers: {config}");
 
-			return new Dice([..faces]);
+			return new Dice([.. faces]);
 		}
 		catch (ArgumentException e)
 		{

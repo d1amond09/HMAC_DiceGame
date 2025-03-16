@@ -55,22 +55,22 @@ public class Game
 	private void PlayRound()
 	{
 		Console.WriteLine("It's time for the throws.");
-		(_computerThrowResult, _userThrowResult) = PlayRound(_turnManager.CurrentPlayer, _computerDice!, _userDice!);
+		(_computerThrowResult, _userThrowResult) = PlayRound(_turnManager.CurrentPlayer);
 	}
 
-	public (int computerResult, int userResult) PlayRound(int currentPlayer, Dice computerDice, Dice userDice)
+	public (int computerResult, int userResult) PlayRound(int currentPlayer)
 	{
 		int computerThrow, userThrow;
 
 		if (currentPlayer == 0)
 		{
-			computerThrow = _throwHandler.ComputerThrows(computerDice);
-			userThrow = _throwHandler.PlayerThrows(userDice);
+			computerThrow = _throwHandler.ComputerThrows(_computerDice);
+			userThrow = _throwHandler.PlayerThrows(_userDice);
 		}
 		else
 		{
-			userThrow = _throwHandler.ComputerThrows(userDice);
-			computerThrow = _throwHandler.PlayerThrows(computerDice);
+			userThrow = _throwHandler.ComputerThrows(_computerDice);
+			computerThrow = _throwHandler.PlayerThrows(_userDice);
 		}
 
 		return (computerThrow, userThrow);
