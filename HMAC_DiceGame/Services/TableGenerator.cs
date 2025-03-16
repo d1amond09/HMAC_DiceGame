@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ConsoleTable;
 using HMAC_DiceGame.Models;
 
@@ -9,39 +8,41 @@ namespace HMAC_DiceGame.Services;
 
 public class TableGenerator
 {
-	private ProbabilityCalculator _probCalculator;
-
-	public TableGenerator()
-	{
-		_probCalculator = new();
-	}
+	private readonly ProbabilityCalculator _probCalculator = new();
 
 	public void RenderTable(List<Dice> diceList)
 	{
-		var table = new Table().AddColumn("User Dice v");
+		Console.WriteLine("\nProbability of the win for the user:");
+		Console.WriteLine("Each cell shows the probability that the user's dice (row)");
+		Console.WriteLine("will win against the computer's dice (column)\n");
 
-		var columnHeaders = diceList.Select(d => string.Join(",", d.Faces)).ToArray();
+		var table = new Table().AddColumn("User Dice →");
+
+		var columnHeaders = diceList
+			.Select(d => string.Join(",", d.Faces))
+			.ToArray();
+
 		table.AddColumn(columnHeaders);
 
-		for (int i = 0; i < diceList.Count; i++)
+		for (var i = 0; i < diceList.Count; i++)
 		{
-			var row = new List<string> { string.Join(",", diceList[i].Faces) };
-			for (int j = 0; j < diceList.Count; j++)
+			var currentDice = diceList[i];
+			var row = new List<string> { string.Join(",", currentDice.Faces) };
+
+			foreach (var opponentDice in diceList)
 			{
-				if (i == j)
-				{
-					row.Add("-");
-				}
-				else
-				{
-					var probability = _probCalculator.CalculateProbability(diceList[i], diceList[j]);
-					row.Add(probability.ToString("F3"));
-				}
+				var probability = _probCalculator.CalculateProbability(currentDice, opponentDice);
+				row.Add(FormatCell(probability, currentDice == opponentDice));
 			}
+
 			table.AddRow([.. row]);
 		}
 
-		Console.WriteLine("Probability of the win for the user:");
-		Console.WriteLine(table);
+		Console.WriteLine(table.ToString());
+		Console.WriteLine();
 	}
+
+	private static string FormatCell(double probability, bool isDiagonal) =>
+		isDiagonal ? $"- ({probability:F4})" : $"{probability:F4}";
+
 }

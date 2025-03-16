@@ -24,7 +24,14 @@ public static class ConfigurationParserExtensions
 				.Split(separator)
 				.Select(s => int.Parse(s.Trim()));
 
+			if(faces.Count() < 3) 
+				throw new ArgumentException($"ERROR: Configuration contains less then 3 integers: {config}");
+
 			return new Dice([..faces]);
+		}
+		catch (ArgumentException e)
+		{
+			throw new ArgumentException(e.Message);
 		}
 		catch (FormatException)
 		{

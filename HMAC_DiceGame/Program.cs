@@ -11,10 +11,8 @@ internal class Program
         try
         {
             List<Dice> dices = args.ParseToDices();
-
             Game game = new(dices);
             game.Run();
-            
         }
         catch (ArgumentException ex)
 		{

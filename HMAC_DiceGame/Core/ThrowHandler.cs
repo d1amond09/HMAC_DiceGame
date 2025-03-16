@@ -10,18 +10,19 @@ public class ThrowHandler(RandomGenerator rndGenerator, TableGenerator table, Li
 	private readonly TableGenerator _table = table;
 	private readonly List<Dice> _dicesForTable = dicesForTable;
 
-	public int ComputerThrows(int range, Dice? dice)
+	public int ComputerThrows(Dice? dice)
 	{
-		return Throws(range, dice);
+		return Throws(dice, true);
 	}
 
-	public int PlayerThrows(int range, Dice dice)
+	public int PlayerThrows(Dice? dice)
 	{
-		return Throws(range, dice);
+		return Throws(dice, false);
 	}
 
-	private int Throws(int range, Dice? dice)
+	private int Throws(Dice? dice, bool isComputer)
 	{
+		int range = dice!.Length;
 		_rndGenerator.GenerateKey();
 		_rndGenerator.CalculateHMACSHA256(range);
 		var hmac = _rndGenerator.HMAC;
@@ -40,7 +41,7 @@ public class ThrowHandler(RandomGenerator rndGenerator, TableGenerator table, Li
 		if (userChoice == "?")
 		{
 			_table.RenderTable(_dicesForTable);
-			return Throws(range, dice);
+			return Throws(dice, isComputer);
 		}
 
 		int userNumber = int.Parse(userChoice);
@@ -60,7 +61,9 @@ public class ThrowHandler(RandomGenerator rndGenerator, TableGenerator table, Li
 		ArgumentNullException.ThrowIfNull(dice);
 		int throwResult = dice.Roll(result);
 
-		Console.WriteLine($"My throw is {throwResult}.");
+
+		string who = isComputer ? "My" : "Your";
+		Console.WriteLine($"{who} throw is {throwResult}.");
 
 		return throwResult;
 	}

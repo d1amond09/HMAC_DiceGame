@@ -9,8 +9,8 @@ public class Game
 	private readonly DiceSelector _diceSelector;
 	private readonly RoundHandler _roundHandler;
 	private readonly WinnerDeterminer _winnerDeterminer;
-	private Dice _computerDice;
-	private Dice _userDice;
+	private Dice? _computerDice;
+	private Dice? _userDice;
 	private int _computerThrowResult;
 	private int _userThrowResult;
 
@@ -56,7 +56,7 @@ public class Game
 	private void PlayRound()
 	{
 		Console.WriteLine("It's time for the throws.");
-		(_computerThrowResult, _userThrowResult) = _roundHandler.PlayRound(_turnManager.CurrentPlayer, _computerDice, _userDice);
+		(_computerThrowResult, _userThrowResult) = _roundHandler.PlayRound(_turnManager.CurrentPlayer, _computerDice!, _userDice!);
 	}
 
 	private void DetermineWinner()

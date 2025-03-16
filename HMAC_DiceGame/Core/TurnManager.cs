@@ -1,4 +1,6 @@
-﻿namespace HMAC_DiceGame.Core;
+﻿using HMAC_DiceGame.Models;
+
+namespace HMAC_DiceGame.Core;
 
 public class TurnManager(ThrowHandler throwHandler)
 {
@@ -7,7 +9,8 @@ public class TurnManager(ThrowHandler throwHandler)
 
 	public int DetermineFirstPlayer()
 	{
-		int firstPlayer = _throwHandler.ComputerThrows(2, null);
+		Dice firstMove = new([0, 1]);
+		int firstPlayer = _throwHandler.ComputerThrows(firstMove);
 		_currentPlayer = firstPlayer;
 		return firstPlayer;
 	}

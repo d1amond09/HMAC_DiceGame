@@ -12,13 +12,13 @@ public class RoundHandler(ThrowHandler throwHandler)
 
 		if (currentPlayer == 0)
 		{
-			computerThrow = _throwHandler.ComputerThrows(6, computerDice);
-			userThrow = _throwHandler.PlayerThrows(6, userDice);
+			computerThrow = _throwHandler.ComputerThrows(computerDice);
+			userThrow = _throwHandler.PlayerThrows(userDice);
 		}
 		else
 		{
-			userThrow = _throwHandler.ComputerThrows(6, userDice);
-			computerThrow = _throwHandler.PlayerThrows(6, computerDice);
+			userThrow = _throwHandler.ComputerThrows(userDice);
+			computerThrow = _throwHandler.PlayerThrows(computerDice);
 		}
 
 		return (computerThrow, userThrow);
