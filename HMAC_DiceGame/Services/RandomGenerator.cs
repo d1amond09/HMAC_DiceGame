@@ -34,7 +34,7 @@ public class RandomGenerator
 
 	public void CalculateHMACSHA256(int range)
 	{
-		using var hmac = new HMACSHA256(_key);
+		using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(Key));
 		_number = RandomNumberGenerator.GetInt32(range);
 		byte[] message = Encoding.UTF8.GetBytes(_number.ToString());
 		_hmac = hmac.ComputeHash(message);
