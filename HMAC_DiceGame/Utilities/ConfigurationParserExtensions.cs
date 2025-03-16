@@ -1,17 +1,19 @@
-﻿namespace HMAC_DiceGame;
+﻿using HMAC_DiceGame.Models;
 
-public static class Configuration
+namespace HMAC_DiceGame.Utilities;
+
+public static class ConfigurationParserExtensions
 {
-	public static List<Dice> ParseToDices(this string[] configs, char separator = ',')
-	{
-		ValidateConfigurations(configs);
-		return [.. configs.Select(config => config.ParseToDice(separator))];
-	}
-
 	private static void ValidateConfigurations(string[] configs)
 	{
 		if (configs.Length < 3) 
 			throw new ArgumentException("ERROR: At least 3 dice are required");
+	}
+
+	public static List<Dice> ParseToDices(this string[] configs, char separator = ',')
+	{
+		ValidateConfigurations(configs);
+		return [.. configs.Select(config => config.ParseToDice(separator))];
 	}
 
 	public static Dice ParseToDice(this string config, char separator)

@@ -1,4 +1,8 @@
-﻿namespace HMAC_DiceGame;
+﻿using HMAC_DiceGame.Core;
+using HMAC_DiceGame.Models;
+using HMAC_DiceGame.Utilities;
+
+namespace HMAC_DiceGame;
 
 internal class Program
 {
@@ -8,8 +12,8 @@ internal class Program
         {
             List<Dice> dices = args.ParseToDices();
 
-            foreach (var dice in dices)
-				Console.WriteLine(dice);
+            Game game = new(dices);
+            game.Run();
             
         }
         catch (ArgumentException ex)

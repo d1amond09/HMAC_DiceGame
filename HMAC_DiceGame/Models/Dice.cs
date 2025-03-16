@@ -1,4 +1,4 @@
-﻿namespace HMAC_DiceGame;
+﻿namespace HMAC_DiceGame.Models;
 
 public class Dice(int[] faces)
 {
