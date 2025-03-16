@@ -8,11 +8,12 @@ public class Game
 	private readonly TurnManager _turnManager;
 	private readonly DiceSelector _diceSelector;
 	private readonly ThrowHandler _throwHandler;
-
 	private Dice? _computerDice;
 	private Dice? _userDice;
 	private int _computerThrowResult;
 	private int _userThrowResult;
+
+	
 
 	public Game(List<Dice> dices)
 	{
